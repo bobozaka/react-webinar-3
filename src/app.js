@@ -38,15 +38,19 @@ function App({ store }) {
     });
   }
 
-  console.log(products);
+  const handleDeleteItem = useCallback(
+    (code) => {
+      store.deleteItem(code);
+    },
+    [store],
+  );
 
-  const handleDeleteItem = useCallback((code) => {
-    store.deleteItem(code);
-  }, [store]);
-
-  const handleSelectItem = useCallback((code) => {
-    store.selectItem(code);
-  }, [store]);
+  const handleSelectItem = useCallback(
+    (code) => {
+      store.selectItem(code);
+    },
+    [store],
+  );
 
   const handleAddItem = useCallback(() => {
     store.addItem();

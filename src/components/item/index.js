@@ -1,10 +1,10 @@
-import React from "react";
-import PropTypes from "prop-types";
-import styles from "./Item.module.scss";
+import React from 'react';
+import PropTypes from 'prop-types';
+import styles from './Item.module.scss';
 
 const Item = (props) => {
   const { code, title, price, countValue } = props.item;
-  const { modal, addProduct, removeProduct } = props;
+  const { modal, addProduct, removeProduct, products } = props;
 
   // Форматирование прайса с пробелами между каждыми тремя цифрами
   const formattedPrice = price.toLocaleString(undefined, {
@@ -20,8 +20,8 @@ const Item = (props) => {
       </div>
       <div className={styles.itemActions}>
         <div className={styles.itemActionsText}>
-          <p>{formattedPrice + " ₽"}</p>
-          {modal && <p>{countValue + " шт"}</p>}
+          <p>{formattedPrice + ' ₽'}</p>
+          {modal && products.length > 0 && <p>{countValue + ' шт'}</p>}
         </div>
         {!modal ? (
           <button onClick={() => addProduct(props.item)}>Добавить</button>
@@ -29,6 +29,7 @@ const Item = (props) => {
           <button onClick={() => removeProduct(props.item)}>Удалить</button>
         )}
       </div>
+      {modal && products.length === 0 && <p>Корзина пуста</p>}
     </div>
   );
 };
@@ -42,11 +43,13 @@ Item.propTypes = {
   }).isRequired,
   onDelete: PropTypes.func,
   onSelect: PropTypes.func,
+  modal: PropTypes.bool,
 };
 
 Item.defaultProps = {
   onDelete: () => {},
   onSelect: () => {},
+  modal: false,
 };
 
 export default React.memo(Item);

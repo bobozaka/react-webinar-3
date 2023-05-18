@@ -4,7 +4,7 @@ import styles from './Controls.module.scss';
 import { plural } from '../../utils';
 import List from '../list';
 
-const Controls = ({ setModal, modal, countPrice, products, removeProduct }) => {
+const Controls = ({ setModal, modal, countPrice, products, removeProduct, list }) => {
   const handleShowModal = () => {
     setModal(true);
   };
@@ -13,7 +13,6 @@ const Controls = ({ setModal, modal, countPrice, products, removeProduct }) => {
     setModal(false);
   };
 
-  // Форматирование countPrice с пробелами между каждыми тремя цифрами
   const formattedCountPrice = countPrice.toLocaleString(undefined, {
     maximumFractionDigits: 0,
     minimumFractionDigits: 0,
@@ -24,13 +23,18 @@ const Controls = ({ setModal, modal, countPrice, products, removeProduct }) => {
       <div className={styles.controls}>
         <p className={styles.controlsTitle}>В корзине:</p>
         <h3 className={styles.controlsCount}>
-          {products.length > 0
-            ? ` ${products.length} ${plural(products.length, {
+          {products.length > 0 ? (
+            <>
+              {products.length}{' '}
+              {plural(products.length, {
                 one: 'товар',
                 few: 'товара',
                 many: 'товаров',
-              })}`
-            : 'пусто'}{' '}
+              })}
+            </>
+          ) : (
+            'пусто'
+          )}{' '}
           {countPrice > 0 ? ` / ${formattedCountPrice}₽` : ''}
         </h3>
         <button className={styles.controlsBtn} onClick={handleShowModal}>
@@ -47,7 +51,7 @@ const Controls = ({ setModal, modal, countPrice, products, removeProduct }) => {
               </button>
             </header>
             <div className={styles.modalProductsList}>
-              <List products={products} removeProduct={removeProduct} modal={modal} />
+              <List list={list} products={products} removeProduct={removeProduct} modal={modal} />
             </div>
             <footer className={styles.modalFooter}>
               <h3 className={styles.modalFooterTitle}>Итого</h3>
@@ -66,6 +70,11 @@ Controls.propTypes = {
   countPrice: PropTypes.number.isRequired,
   products: PropTypes.array.isRequired,
   removeProduct: PropTypes.func.isRequired,
+  list: PropTypes.arrayOf(
+    PropTypes.shape({
+      code: PropTypes.number.isRequired,
+    }),
+  ).isRequired,
 };
 
 export default React.memo(Controls);
